@@ -98,3 +98,45 @@ This is where all Galaxy files, configs and libs are. This is the main Galaxy di
 **4) /export/galaxy-central/**
 
 This is the dir that Galaxy mount in the job node. Be aware that tools/ and config/ are there as well (they are a copy of the one in /galaxy-central/, so keep them synchronized)
+
+
+## Create a single-cell tool config file
+
+
+To add our single-cell tools to the main galaxy, we need to create a config file specifically for single-cell tools. Create a file in the following directory
+
+```{bash}
+nano /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+```
+
+and enter the following template code:
+
+```{bash}
+<?xml version='1.0' encoding='utf-8'?>
+<toolbox monitor="true">
+  <section id="testing" name="Test section">
+  </section>
+</toolbox>
+
+```
+
+After adding and modifying these files, restart the galaxy:
+
+```{bash}
+## Restart galaxy from within container
+supervisorctl restart galaxy:
+```
+
+
+## Error logs
+
+In case the Galaxy does not work, the error logs can be found under:
+
+```{bash}
+## File containing error erports
+/var/log/galaxy/uwsgi.log
+
+## To surveil erors live
+tail -f /var/log/galaxy/uwsgi.log
+```
+
