@@ -120,6 +120,16 @@ and enter the following template code:
 
 ```
 
+Add the singl-cell config file to the tool config file:
+
+```{bash}
+nano /etc/galaxy/galaxy.yml
+
+## find tool_config_file and add:
+,/cvmfs/soft.galaxy/v2.1/server/config/tool_conf.xml,/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+```
+
+
 After adding and modifying these files, restart the galaxy:
 
 ```{bash}

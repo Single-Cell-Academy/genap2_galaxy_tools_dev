@@ -1,0 +1,87 @@
+---
+title: "GenAP2 Galaxy: CellRanger recipe"
+author: "Florian Wuennemann"
+date: "07/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE, eval = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This markdown describes how to setup CellRanger v.XX in GenAP2 Galaxy. 
+
+# Github repo
+
+The github repo holding the code for CellRanger in Galaxy can be found here:
+
+https://github.com/FloWuenne/genap2_galaxy_cellranger
+
+# Download CellRanger binaries
+
+The following curl command will download the precompiled binaries for CellRanger v.3.1.0
+
+```{bash}
+wget -O cellranger-3.1.0.tar.gz "http://cf.10xgenomics.com/releases/cell-exp/cellranger-3.1.0.tar.gz?Expires=1583676604&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9jZWxsLWV4cC9jZWxscmFuZ2VyLTMuMS4wLnRhci5neiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU4MzY3NjYwNH19fV19&Signature=hBWQvgiWavxRQws6MRYg~DIXXOOyQw7RTAXwDbJI-G0A7kkABkrlB9KmuTeqOVw51-2V48xDkqdpjMXzd-KpxbxSdvcjNsBzhpn-b15FEAaPNvLM7ixq1dZEjO-nLtFhGNpitAIo8z5aJaE7D-kgRNibmWQC~JySAXLArwWmb0-Dngj-D2WzJhjTgclAnlYncnwg25nzQvLbsWjjXdBqmqBXHwyNUvrDjpDUOKy-HuYV3azqdhE2eX-J0GWjqQ0HuRENEavsIyHc7VLpBTwQ~AjnAUFi1AjCgeGkMmpzBJQbOgTPeDdqn4ePGP3BSQH64yRtB7OOpaD-Mtl-oRuX9w__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
+```
+
+Then unpack the gzip archive with this command:
+
+```{bash}
+tar -zxvf cellranger-3.1.0.tar.gz
+```
+
+# Test CellRanger
+
+Run a quick test on the CellRanger binary by doing a sitecheck:
+
+```{bash}
+cellranger sitecheck > sitecheck.txt
+```
+
+
+# Download references
+
+CellRanger requires references to align single-cell data. Below you can find all of the commands to download the basic references that we provide in GenAP2. Please download them to the following directory, specified in the cellranger galaxy tool:
+
+```{bash}
+## Human GRCH38
+wget http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-GRCh38-3.0.0.tar.gz
+
+## Human hg19
+wget http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-hg19-3.0.0.tar.gz
+
+## Mouse mm10
+wget http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-mm10-3.0.0.tar.gz
+```
+
+# Add tool to Galaxy
+
+To add the tool to galaxy, we will now push it to the cvmfs.
+
+/cvmfs/soft.galaxy/v2.1/server/tools
+
+
+```{bash}
+cd /cvmfs/soft.galaxy/v2.1/server/tools
+git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git
+
+## test
+git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /export/galaxy-central/genap2_galaxy_cellranger
+git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /galaxy-central/tools/genap2_galaxy_cellranger
+```
+
+
+# tool_SC_conf.xml entries
+
+Finally, add these lines to /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml.
+
+```{bash}
+  <section id="galaxy_cellranger" name="scRNA-seq: Cellranger v.3.1.0">
+    <tool file="genap2_galaxy_cellranger/cellranger_mkfastq.xml" />
+    <tool file="genap2_galaxy_cellranger/cellranger_count.xml" />
+    <tool file="genap2_galaxy_cellranger/cellranger_aggr.xml" />
+    <tool file="genap2_galaxy_cellranger/cellranger_reanalyze.xml" />
+  </section>
+```
+
