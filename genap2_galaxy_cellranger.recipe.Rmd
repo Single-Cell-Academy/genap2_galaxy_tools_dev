@@ -9,17 +9,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This markdown describes how to setup CellRanger v.XX in GenAP2 Galaxy. 
+This page describes how to setup CellRanger v.XX in GenAP2 Galaxy. 
 
-# Github repo
+# Github repo for CellRanger Galaxy
 
 The github repo holding the code for CellRanger in Galaxy can be found here:
 
 https://github.com/FloWuenne/genap2_galaxy_cellranger
 
-# Download CellRanger binaries
+# CellRanger precompiled binaries
 
-The following curl command will download the precompiled binaries for CellRanger v.3.1.0
+The following curl command will download the precompiled binaries for CellRanger v.3.1.0. 
 
 ```{bash}
 wget -O cellranger-3.1.0.tar.gz "http://cf.10xgenomics.com/releases/cell-exp/cellranger-3.1.0.tar.gz?Expires=1583676604&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2NmLjEweGdlbm9taWNzLmNvbS9yZWxlYXNlcy9jZWxsLWV4cC9jZWxscmFuZ2VyLTMuMS4wLnRhci5neiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTU4MzY3NjYwNH19fV19&Signature=hBWQvgiWavxRQws6MRYg~DIXXOOyQw7RTAXwDbJI-G0A7kkABkrlB9KmuTeqOVw51-2V48xDkqdpjMXzd-KpxbxSdvcjNsBzhpn-b15FEAaPNvLM7ixq1dZEjO-nLtFhGNpitAIo8z5aJaE7D-kgRNibmWQC~JySAXLArwWmb0-Dngj-D2WzJhjTgclAnlYncnwg25nzQvLbsWjjXdBqmqBXHwyNUvrDjpDUOKy-HuYV3azqdhE2eX-J0GWjqQ0HuRENEavsIyHc7VLpBTwQ~AjnAUFi1AjCgeGkMmpzBJQbOgTPeDdqn4ePGP3BSQH64yRtB7OOpaD-Mtl-oRuX9w__&Key-Pair-Id=APKAI7S6A5RYOXBWRPDA"
@@ -39,8 +39,17 @@ Run a quick test on the CellRanger binary by doing a sitecheck:
 cellranger sitecheck > sitecheck.txt
 ```
 
+Finally, add the cellranger executable to the PATH. To be able to only have to do this once, please add this to the general PATH definition!
 
-# Download references
+```{bash}
+export PATH=$PATH:~/cvmfs/soft.galaxy/v2.1/server/tools/florian/bin/cellranger-3.1.0
+```
+
+
+For getting these files onto v2-test and v2-prod, you can copy these files from fac04, from the following directory:
+
+
+# CellRanger reference files
 
 CellRanger requires references to align single-cell data. Below you can find all of the commands to download the basic references that we provide in GenAP2. Please download them to the following directory, specified in the cellranger galaxy tool:
 
@@ -55,24 +64,28 @@ wget http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-hg19-3.0.0.tar.g
 wget http://cf.10xgenomics.com/supp/cell-exp/refdata-cellranger-mm10-3.0.0.tar.gz
 ```
 
+Cellranger references on fac04 can be found in :
+/nfs3_ib/ip24-ib/home.local/barrette.share/template-galaxy-21-jonathan/rootfs/cvmfs/soft.galaxy/v2.1/server/tools/florian/refs
+
+which is visible inside the container as:
+/cvmfs/soft.galaxy/v2.1/server/tools/florian/refs
+
 # Add tool to Galaxy
 
 To add the tool to galaxy, we will now push it to the cvmfs.
 
 /cvmfs/soft.galaxy/v2.1/server/tools
 
-
 ```{bash}
 cd /cvmfs/soft.galaxy/v2.1/server/tools
 git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git
 
-## test
-git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /export/galaxy-central/genap2_galaxy_cellranger
-git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /galaxy-central/tools/genap2_galaxy_cellranger
+## Git clone the cellranger github into /tools/florian
+#git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /cvmfs/soft.galaxy/v2.1/server/tools/florian
 ```
 
 
-# tool_SC_conf.xml entries
+## tool_SC_conf.xml entries
 
 Finally, add these lines to /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml.
 
@@ -84,4 +97,9 @@ Finally, add these lines to /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config
     <tool file="genap2_galaxy_cellranger/cellranger_reanalyze.xml" />
   </section>
 ```
+
+## References Data Tables
+
+To make the references availbe inside the tool, add Data Tables to the data tables file:
+
 

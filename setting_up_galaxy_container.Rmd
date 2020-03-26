@@ -56,7 +56,8 @@ genapproxy create --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local
 When the Galaxy container is created, it will automatically add a admin user and provide the username and password for you. Save these, as you will need them to login to your Galaxy. Galaxy will also provide a weblink, that you can use to connect to the galaxy instance. In my example, the weblink looks like this:
 
 ```{bash, eval = FALSE}
-https://wueflo00-galaxy1.proxy-east01.genap.ca
+## Service connected on:
+https://wueflo00-galaxy2.proxy-east01.genap.ca
 ```
 
 
@@ -78,7 +79,7 @@ singularity instance list
 This will return a list with running instances to you. Copy the name of your instance and then run the following to enter the container. In this example, the container id is galaxy322
 
 ```{bash, eval = FALSE}
-singularity exec instance://galaxy1 bash
+singularity exec instance://galaxy2 bash
 ```
 
 There are mainly 4 folders inside the container that are important
@@ -102,7 +103,6 @@ This is the dir that Galaxy mount in the job node. Be aware that tools/ and conf
 
 ## Create a single-cell tool config file
 
-
 To add our single-cell tools to the main galaxy, we need to create a config file specifically for single-cell tools. Create a file in the following directory
 
 ```{bash}
@@ -120,13 +120,20 @@ and enter the following template code:
 
 ```
 
-Add the singl-cell config file to the tool config file:
+Add the single-cell config file as well as the data table config file to the tool config file:
 
 ```{bash}
 nano /etc/galaxy/galaxy.yml
 
-## find tool_config_file and add:
-,/cvmfs/soft.galaxy/v2.1/server/config/tool_conf.xml,/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+## find tool_config_file in the file and add:
+/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+
+## Table for references
+## find: tool_data_table_config_path in the file and add 
+/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_data_table_conf.xml
+
+## .loc files for single-cell references can be found here:
+/cvmfs/soft.galaxy/v2.1/server/tools/florian/refs/data_tables
 ```
 
 

@@ -1,0 +1,66 @@
+---
+title: "Download test datasets"
+author: "Florian_W"
+date: "24/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
+
+# Download test datasets
+
+All datasets are available from the [10x Genomics homepage](https://www.10xgenomics.com/resources/datasets/)
+
+# 10x v2 chemistry
+
+## 1k Brain Cells from an E18 Mouse (v2 chemistry)
+
+### FASTQ files
+
+```{bash}
+wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v2/neuron_1k_v2_fastqs.tar
+```
+
+### Filtered BC matrix
+
+```{bash}
+wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v2/neuron_1k_v2_filtered_feature_bc_matrix.tar.gz
+```
+
+
+
+# 10x v3 chemistry
+
+## 1k PBMCs from a Healthy Donor (v3 chemistry)
+
+### FASTQ files
+
+```{bash}
+curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_fastqs.tar
+
+wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_fastqs.tar
+```
+
+### Filtered BC files
+
+```{bash, eval = FALSE}
+curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_filtered_feature_bc_matrix.tar.gz
+```
+
+## 1k Brain Cells from an E18 Mouse (v3 chemistry)
+
+## FASTQ files
+
+```{bash}
+wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v3/neuron_1k_v3_fastqs.tar
+```
+
+### Filtered BC files
+
+
+```{bash}
+wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v3/neuron_1k_v3_filtered_feature_bc_matrix.tar.gz
+```
+
