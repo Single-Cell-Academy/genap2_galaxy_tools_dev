@@ -125,12 +125,17 @@ Add the single-cell config file as well as the data table config file to the too
 ```{bash}
 nano /etc/galaxy/galaxy.yml
 
+## Add the cvmfs tool folder as the default tool dir
+tool_path:  /cvmfs/soft.galaxy/v2.1/server/tools
+
 ## find tool_config_file in the file and add:
+# tool_config_file
 /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
 
 ## Table for references
 ## find: tool_data_table_config_path in the file and add 
-/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_data_table_conf.xml
+# tool_data_table_config_path
+/cvmfs/soft.galaxy/v2.1/server/tools/florian/tool_data_table_config.xml
 
 ## .loc files for single-cell references can be found here:
 /cvmfs/soft.galaxy/v2.1/server/tools/florian/refs/data_tables

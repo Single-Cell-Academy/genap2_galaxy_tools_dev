@@ -43,6 +43,14 @@ curl -O http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_f
 wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/pbmc_1k_v3/pbmc_1k_v3_fastqs.tar
 ```
 
+To create smaller test datasets, use any of these commands:
+
+```{bash}
+zcat pbmc_1k_v3_S1_L001_R1_001.fastq.gz | head -1000000 > pbmc_1k_v3_S1_L001_R1_001.1M_reads.fastq | gzip
+zcat pbmc_1k_v3_S1_L001_R2_001.fastq.gz | head -1000000 > pbmc_1k_v3_S1_L001_R2_001.1M_reads.fastq | gzip
+```
+
+
 ### Filtered BC files
 
 ```{bash, eval = FALSE}
@@ -64,3 +72,5 @@ wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v3/neuron_1k_v3_
 wget http://cf.10xgenomics.com/samples/cell-exp/3.0.0/neuron_1k_v3/neuron_1k_v3_filtered_feature_bc_matrix.tar.gz
 ```
 
+
+# Subsetting commands
