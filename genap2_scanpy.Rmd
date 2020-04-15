@@ -1,0 +1,24 @@
+---
+title: "genap2_scanpy_1.4.3"
+author: "Florian_W"
+date: "06/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Tutorial on how to configure and set up the scanpy on fac04.
+
+# Setup environment
+
+```{bash}
+cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/
+source bin/activate
+conda create --name __scanpy-scripts@0.2.10 scanpy-scripts=0.2.10 --channel bioconda --channel conda-forge
+conda activate __scanpy-scripts@0.2.10
+```
+

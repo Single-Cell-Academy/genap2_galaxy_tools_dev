@@ -77,11 +77,17 @@ To add the tool to galaxy, we will now push it to the cvmfs.
 /cvmfs/soft.galaxy/v2.1/server/tools
 
 ```{bash}
-cd /cvmfs/soft.galaxy/v2.1/server/tools
+cd /cvmfs/soft.galaxy/v2.1/server/tools/cvmfs/soft.galaxy/v2.1/server/tools/single_cell_tools/genap2_galaxy_cellranger
 git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git
 
 ## Git clone the cellranger github into /tools/florian
 #git clone https://github.com/FloWuenne/genap2_galaxy_cellranger.git /cvmfs/soft.galaxy/v2.1/server/tools/florian
+```
+
+# Install dependencies
+
+```{r}
+
 ```
 
 
