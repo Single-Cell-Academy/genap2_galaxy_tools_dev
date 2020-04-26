@@ -135,10 +135,10 @@ tool_path:  /cvmfs/soft.galaxy/v2.1/server/tools
 ## Table for references
 ## find: tool_data_table_config_path in the file and add 
 # tool_data_table_config_path
-/cvmfs/soft.galaxy/v2.1/server/tools/florian/tool_data_table_config.xml
+/cvmfs/soft.galaxy/v2.1/server/tools/single_cell_tools/tool_data_table_config.xml
 
 ## .loc files for single-cell references can be found here:
-/cvmfs/soft.galaxy/v2.1/server/tools/florian/refs/data_tables
+/cvmfs/soft.galaxy/v2.1/server/tools/single_cell_tools/refs/data_tables
 ```
 
 
@@ -160,5 +160,11 @@ In case the Galaxy does not work, the error logs can be found under:
 
 ## To surveil erors live
 tail -f /var/log/galaxy/uwsgi.log
+```
+
+```{r}
+library(magick)
+figure_1_panel_a <-  image_read_svg("/Users/florian_wuennemann/Postdoc/Postdoc_MHI/Endoscreen_CRISPR/Manuscript_files/Figure1_panelA.svg")
+figure_1_panel_a
 ```
 

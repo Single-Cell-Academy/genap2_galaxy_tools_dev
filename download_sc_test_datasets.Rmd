@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
+This markdown contains an overview of all test datasets used to test single-cell tools for Galaxy in GenAP2.
+
 # Download test datasets
 
 All datasets are available from the [10x Genomics homepage](https://www.10xgenomics.com/resources/datasets/)
