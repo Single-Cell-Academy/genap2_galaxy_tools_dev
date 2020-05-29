@@ -117,7 +117,6 @@ and enter the following template code:
   <section id="testing" name="Test section">
   </section>
 </toolbox>
-
 ```
 
 Add the single-cell config file as well as the data table config file to the tool config file:
@@ -155,16 +154,28 @@ supervisorctl restart galaxy:
 In case the Galaxy does not work, the error logs can be found under:
 
 ```{bash}
-## File containing error erports
+## File containing error reports
 /var/log/galaxy/uwsgi.log
 
 ## To surveil erors live
 tail -f /var/log/galaxy/uwsgi.log
 ```
 
-```{r}
-library(magick)
-figure_1_panel_a <-  image_read_svg("/Users/florian_wuennemann/Postdoc/Postdoc_MHI/Endoscreen_CRISPR/Manuscript_files/Figure1_panelA.svg")
-figure_1_panel_a
+
+# Installing tools
+
+## Creating a conda environment
+
+## Mulled environments
+
+## Removing environment
+
+```{bash}
+## Activate conda
+cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
+source ./bin/activate
+
+## Example of an environment I had to remove 
+conda env remove --name mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb ## replace this name by the environment name you want to remove
 ```
 

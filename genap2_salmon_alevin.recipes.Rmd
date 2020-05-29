@@ -1,0 +1,46 @@
+---
+title: "Salmon Alevin"
+author: "Florian_W"
+date: "29/05/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+This markdown contains recipes for creating environments for salmon alevin related tools.
+
+# Salmon alevin
+
+## Important info
+
+To process read pairs that were sequenced across multiple different lanes, users have to create collections of R1 and R2 files to use as input for the salmon alevin tool or workflow. This is to make sure, that multiple files can easily be processed. This is sort of a hack to make this work at the moment!
+
+# Create Scanpy object
+
+# Create Seurat object
+
+tool: alevin_to_seurat.xml
+helper_scripts: convert_alevin_to_seurat.R
+
+```{bash}
+## Get mulled name
+python mulled_name.py __r-base@3.4.1 __r-getopt@1.20.0 __r-seurat@2.3.4 __r-reticulate@1.15
+
+## Activate conda
+cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
+source ./bin/activate
+
+## Create environment and install packages
+conda create --prefix /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb r-base=3.4.1 --channel bioconda
+conda activate /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb
+conda install r-getopt=1.20.0 --channel conda-forge
+conda install r-seurat=2.3.4 --channel bioconda --channel conda-forge ## This step in particular takes extremely long due to the long list of dependencies for seurat
+conda install r-reticulate=1.15 --channel conda-forge
+```
+
+
+

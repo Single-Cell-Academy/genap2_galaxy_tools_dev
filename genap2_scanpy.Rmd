@@ -18,7 +18,7 @@ Tutorial on how to configure and set up the scanpy on fac04.
 ```{bash}
 cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/
 source bin/activate
-conda create --name __scanpy-scripts@0.2.10 scanpy-scripts=0.2.10 --channel bioconda --channel conda-forge
+/cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/bin/conda create --prefix /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/__scanpy-scripts@0.2.10 scanpy-scripts=0.2.10 --channel bioconda --channel conda-forge
 conda activate __scanpy-scripts@0.2.10
 ```
 
