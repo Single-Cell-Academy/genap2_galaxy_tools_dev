@@ -10,10 +10,6 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Introduction
-
-This markdown will exaplain how to setup and connec to the VM for developing single-cell Galaxy tools for GenAP2. In February 2020, the GenAP2 team changed the general architecture of how the Galaxy image was organized. This directly changed the paths for developing and implementing single-cell tools for Galaxy.
-
 # Setting up a galaxy container
 
 ## 1) Connecting to FAC04
