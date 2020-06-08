@@ -12,6 +12,10 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 
 # Setting up a galaxy container
 
+## Introduction 
+
+This markdown will exaplain how to setup and connec to the VM for developing single-cell Galaxy tools for GenAP2. In February 2020, the GenAP2 team changed the general architecture of how the Galaxy image was organized. This directly changed the paths for developing and implementing single-cell tools for Galaxy.
+
 ## 1) Connecting to FAC04
 
 First, we will need to connect to the fac04. To do this, we need to add the following code to our .ssh/config file. If this file doesn't exist, you can manually create it. Add this code in the file
@@ -210,22 +214,5 @@ Afterward, we have to create a file called /etc/logrotate.d/galaxy and insert th
    missingok
    notifempty
 }
-```
-
-# Installing tools
-
-## Creating a conda environment
-
-## Mulled environments
-
-## Removing environment
-
-```{bash}
-## Activate conda
-cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
-source ./bin/activate
-
-## Example of an environment I had to remove 
-conda env remove --name mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb ## replace this name by the environment name you want to remove
 ```
 
