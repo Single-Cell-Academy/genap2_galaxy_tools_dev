@@ -3,14 +3,6 @@ Setting up Galaxy container for developing tools
 FlorianW
 02/03/2020
 
-# Introduction
-
-This markdown will exaplain how to setup and connec to the VM for
-developing single-cell Galaxy tools for GenAP2. In February 2020, the
-GenAP2 team changed the general architecture of how the Galaxy image was
-organized. This directly changed the paths for developing and
-implementing single-cell tools for Galaxy.
-
 # Setting up a galaxy container
 
 ## 1\) Connecting to FAC04
@@ -60,7 +52,8 @@ weblink, that you can use to connect to the galaxy instance. In my
 example, the weblink looks like this:
 
 ``` bash
-https://wueflo00-galaxy1.proxy-east01.genap.ca
+## Service connected on:
+https://wueflo00-galaxy2.proxy-east01.genap.ca
 ```
 
 To destroy the container, run the following code:
@@ -68,6 +61,31 @@ To destroy the container, run the following code:
 ``` bash
 # To clean
 genapproxy destroy --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local/barrette.share/singproxy/conf/jonathan_tool_mike.conf
+```
+
+## Useful alias for fac04
+
+``` bash
+## app creation alias
+alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
+
+## Enter singularity container
+alias enter_galaxy="singularity exec instance://galaxy2 bash"
+
+## Restart singularity container
+alias restart_galaxy="supervisorctl restart galaxy:"
+
+## Go to location of tool_conf.xml
+alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
+
+## Go to tools
+alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
+
+## Listen to error report
+alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
+
+## Show singularity instances
+alias show_instances="singularity instance list"
 ```
 
 ## 3\) Enter the container and check data structures
@@ -83,7 +101,7 @@ your instance and then run the following to enter the container. In this
 example, the container id is galaxy322
 
 ``` bash
-singularity exec instance://galaxy1 bash
+singularity exec instance://galaxy2 bash
 ```
 
 There are mainly 4 folders inside the container that are important
@@ -108,3 +126,110 @@ Galaxy dir
 This is the dir that Galaxy mount in the job node. Be aware that tools/
 and config/ are there as well (they are a copy of the one in
 /galaxy-central/, so keep them synchronized)
+
+## Create a single-cell tool config file
+
+To add our single-cell tools to the main galaxy, we need to create a
+config file specifically for single-cell tools. Create a file in the
+following directory
+
+``` bash
+nano /cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+```
+
+and enter the following template code:
+
+``` bash
+<?xml version='1.0' encoding='utf-8'?>
+<toolbox monitor="true">
+  <section id="testing" name="Test section">
+  </section>
+</toolbox>
+```
+
+Add the single-cell config file as well as the data table config file to
+the tool config file:
+
+``` bash
+nano /etc/galaxy/galaxy.yml
+
+## Add the cvmfs tool folder as the default tool dir
+tool_path:  /cvmfs/soft.galaxy/v2.1/server/tools
+
+## find tool_config_file in the file and add:
+# tool_config_file
+/cvmfs/soft.galaxy/v2.1/server/config/tool_SC_config.xml
+
+## Table for references
+## find: tool_data_table_config_path in the file and add 
+# tool_data_table_config_path
+/cvmfs/soft.galaxy/v2.1/server/tools/single_cell_tools/tool_data_table_config.xml
+
+## .loc files for single-cell references can be found here:
+/cvmfs/soft.galaxy/v2.1/server/tools/single_cell_tools/refs/data_tables
+```
+
+After adding and modifying these files, restart the galaxy:
+
+``` bash
+## Restart galaxy from within container
+supervisorctl restart galaxy:
+```
+
+## Error logs
+
+In case the Galaxy does not work, the error logs can be found under:
+
+``` bash
+## File containing error reports
+/var/log/galaxy/uwsgi.log
+
+## To surveil erors live
+tail -f /var/log/galaxy/uwsgi.log
+```
+
+## Log rotation
+
+This is an important final step of setting up the container. We need to
+enable log rotation, otherwise error logs can clog the system and create
+problems for other users containers.
+
+In your /etc/galaxy/galaxy/yml search for the following option:
+
+``` bash
+nano /etc/galaxy/galaxy.yml
+
+## Set log_level: ERROR
+```
+
+Afterward, we have to create a file called /etc/logrotate.d/galaxy and
+insert the following code:
+
+``` bash
+## /etc/logrotate.d/
+/var/log/galaxy/*.log {
+   daily
+   rotate 14
+   copytruncate
+   compress
+   missingok
+   notifempty
+}
+```
+
+# Installing tools
+
+## Creating a conda environment
+
+## Mulled environments
+
+## Removing environment
+
+``` bash
+## Activate conda
+cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
+source ./bin/activate
+
+## Example of an environment I had to remove 
+conda env remove --name mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb ## replace this name by the environment name you want to remove
+```

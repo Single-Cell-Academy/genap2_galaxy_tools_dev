@@ -42,5 +42,5 @@ conda install r-seurat=2.3.4 --channel bioconda --channel conda-forge ## This st
 conda install r-reticulate=1.15 --channel conda-forge
 ```
 
-
+2020-05-29: This installation process had issues with shared libraries. To fix this for the moment, reticulate was removed from the dependencies to have the same environment as used for Create Scanpy object. This way, both conversion scripts will utilize the same environment.
 
