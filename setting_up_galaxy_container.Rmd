@@ -7,7 +7,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 # Setting up a galaxy container
@@ -63,6 +63,32 @@ To destroy the container, run the following code:
 # To clean
 genapproxy destroy --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local/barrette.share/singproxy/conf/jonathan_tool_mike.conf
 ```
+
+## Useful alias for fac04
+
+```{bash, eval}
+## app creation alias
+alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
+
+## Enter singularity container
+alias enter_galaxy="singularity exec instance://galaxy2 bash"
+
+## Restart singularity container
+alias restart_galaxy="supervisorctl restart galaxy:"
+
+## Go to location of tool_conf.xml
+alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
+
+## Go to tools
+alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
+
+## Listen to error report
+alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
+
+## Show singularity instances
+alias show_instances="singularity instance list"
+```
+
 
 ## 3) Enter the container and check data structures
 
@@ -157,6 +183,34 @@ In case the Galaxy does not work, the error logs can be found under:
 tail -f /var/log/galaxy/uwsgi.log
 ```
 
+
+## Log rotation
+
+This is an important final step of setting up the container. We need to enable log rotation, otherwise error logs can clog the system and create problems for other users containers.
+
+In your /etc/galaxy/galaxy/yml search for the following option:
+
+
+```{bash}
+nano /etc/galaxy/galaxy.yml
+
+## Set log_level: ERROR
+```
+
+
+Afterward, we have to create a file called /etc/logrotate.d/galaxy and insert the following code:
+
+```{bash}
+## /etc/logrotate.d/
+/var/log/galaxy/*.log {
+   daily
+   rotate 14
+   copytruncate
+   compress
+   missingok
+   notifempty
+}
+```
 
 # Installing tools
 
