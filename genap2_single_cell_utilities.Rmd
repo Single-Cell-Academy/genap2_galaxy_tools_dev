@@ -17,3 +17,5 @@ knitr::opts_chunk$set(echo = TRUE)
 /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/bin/conda create --prefix /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/__regex@2020.4.4  regex=2020.4.4 --channel conda-forge
 /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/bin/conda activate /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/__regex@2020.4.4
 ```
+
+

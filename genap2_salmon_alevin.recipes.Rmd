@@ -28,7 +28,8 @@ helper_scripts: convert_alevin_to_seurat.R
 
 ```{bash}
 ## Get mulled name
-python mulled_name.py __r-base@3.4.1 __r-getopt@1.20.0 __r-seurat@2.3.4 __r-reticulate@1.15
+python mulled_name.py __r-base@3.4.1 __r-getopt@1.20.0 __r-seurat@2.3.4 
+# __r-reticulate@1.15 ## Removed for now
 
 ## Activate conda
 cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
@@ -39,8 +40,7 @@ conda create --prefix /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/mulled
 conda activate /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda/envs/mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb
 conda install r-getopt=1.20.0 --channel conda-forge
 conda install r-seurat=2.3.4 --channel bioconda --channel conda-forge ## This step in particular takes extremely long due to the long list of dependencies for seurat
-conda install r-reticulate=1.15 --channel conda-forge
+#conda install r-reticulate=1.15 --channel conda-forge
 ```
 
 2020-05-29: This installation process had issues with shared libraries. To fix this for the moment, reticulate was removed from the dependencies to have the same environment as used for Create Scanpy object. This way, both conversion scripts will utilize the same environment.
-

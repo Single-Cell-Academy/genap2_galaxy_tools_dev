@@ -68,32 +68,6 @@ To destroy the container, run the following code:
 genapproxy destroy --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local/barrette.share/singproxy/conf/jonathan_tool_mike.conf
 ```
 
-## Useful alias for fac04
-
-```{bash, eval}
-## app creation alias
-alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
-
-## Enter singularity container
-alias enter_galaxy="singularity exec instance://galaxy2 bash"
-
-## Restart singularity container
-alias restart_galaxy="supervisorctl restart galaxy:"
-
-## Go to location of tool_conf.xml
-alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
-
-## Go to tools
-alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
-
-## Listen to error report
-alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
-
-## Show singularity instances
-alias show_instances="singularity instance list"
-```
-
-
 ## 3) Enter the container and check data structures
 
 To find out your container id, run the following code in the shell:
@@ -127,7 +101,7 @@ This is where all Galaxy files, configs and libs are. This is the main Galaxy di
 This is the dir that Galaxy mount in the job node. Be aware that tools/ and config/ are there as well (they are a copy of the one in /galaxy-central/, so keep them synchronized)
 
 
-## Create a single-cell tool config file
+## 4) Create a single-cell tool config file
 
 To add our single-cell tools to the main galaxy, we need to create a config file specifically for single-cell tools. Create a file in the following directory
 
@@ -216,3 +190,33 @@ Afterward, we have to create a file called /etc/logrotate.d/galaxy and insert th
 }
 ```
 
+
+## Useful alias for fac04
+
+```{bash, eval}
+## app creation alias
+alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
+
+## Enter singularity container
+alias enter_galaxy="singularity exec instance://galaxy2 bash"
+
+## Restart singularity container
+alias restart_galaxy="supervisorctl restart galaxy:"
+
+## Go to location of tool_conf.xml
+alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
+
+## Go to tools
+alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
+
+## Listen to error report
+alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
+
+## Show singularity instances
+alias show_instances="singularity instance list"
+```
+
+
+## Troubleshooting
+
+In case the Galaxy app returns a spawn error when trying to restart using the following command: 
