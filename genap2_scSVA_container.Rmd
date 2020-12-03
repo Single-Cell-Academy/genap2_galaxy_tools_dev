@@ -1,0 +1,154 @@
+---
+title: "genap2_scSVA_container"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = FALSE)
+```
+
+# Introduction
+
+This markdown contains the setup and configurations for setting up scSVA as an app container inside GenAP2. 
+
+# Container creation and destruction
+
+## Creating a container on fac04
+
+```{bash}
+/net/ip24/home.local/barrette.share/singproxy-slurm/singproxy create --app=scsva --id=101 --path=/home/wueflo00/mike/scsva_test/ -remote=206.12.91.43:22004 --conf=/nfs3_ib/ip24-ib/home.local/barrette.share/singproxy/conf/genap_arbutus.conf
+```
+
+## Entering a container
+
+```{bash}
+## Replace scsva101 with your container id
+singularity exec instance://scsva101 bash
+```
+
+## Destroying a container
+
+```{bash}
+## Replace scsva101 with your container id
+genapproxy destroy --app=scsva --path=/home/wueflo00/mike/scsva_test/ --conf=/nfs3_ib/ip24-ib/home.local/barrette.share/singproxy/conf/genap_arbutus.conf
+```
+
+## Stopping a container without the path
+
+```{bash}
+## Replace scsva101 with your container id
+singularity instance stop scsva101
+```
+
+
+# Interacting with scSVA on fac04 / genap
+
+## Location of scSVA R package files
+
+```{bash}
+## The server and ui files that are run inside the container are in this folder: 
+/usr/local/lib/R/site-library/scSVA/scSVA/
+```
+
+
+## Location of log files
+
+```{bash}
+## This depends on the path you specified when creating the app
+## In this case here, I used home/wueflo00/mike/scsva_test
+/home/wueflo00/mike/scsva_test/.scsva/log/scsva.log
+```
+
+
+## Recover URL for a runninng scSVA app
+
+```{bash}
+## Replace scsva101 with the ID of your app
+cat ~/.ccproxy/app/scsva101/url
+```
+
+## Find log file for a running app
+
+```{bash}
+cat ~/.ccproxy/app/scsva101/path
+/net/192.168.6.66/genapprojects/ttzbb/
+ls  /net/192.168.6.66/genapprojects/ttzbb/.scsva/log/
+scsva.log
+```
+
+
+# Manual changes to the container on sCAP VM (florian@206.12.92.114)
+
+## Container creation by Michel on 
+
+```{bash}
+# Build the sandbox
+singularity build --sandbox /mnt/mike/scsva_test/ docker://mtabaka/scsva
+
+# Run the service
+singularity exec /mnt/mike/scsva_test/ R -e "shiny::runApp('/usr/local/lib/R/site-library/scSVA/scSVA',launch.browser = TRUE, port=8080, host='0.0.0.0')"
+
+# Access the app
+http://206.12.92.114:8080/
+
+# Run a shell with write permission
+singularity shell --writable /mnt/mike/scsva_test/
+
+# Convert from sandbox to .sif
+singularity build scsva.sif /mnt/mike/scsva_test/
+```
+
+
+
+## Replacing the default shinyFileChoose directory
+
+In the setup by the scSVA authors, the default dir that shinyFileChoose looks in is :
+
+```{r}
+volumes = getVolumes()
+
+## we want to change this to:
+volumes <- c("FTP" = "/ftp", Home = fs::path_home())
+  
+## sed command to replace the code:
+## sed -i '/volumes = getVolumes()/c\volumes <- c("FTP" = "/ftp", Home = fs::path_home())' /mnt/mike/scsva_test/usr/local/lib/R/site-library/scSVA/scSVA/server.R
+```
+
+## Running container on fac04
+
+```{bash}
+#1) Create or edit the container on 206.12.92.114 VM
+# 2) rsync from VM -> fac04
+# 3) play directly on the sandbox running singproxy (eventually v2-test
+# portal )
+
+# Commands to remember:
+
+# to rsync the sandbox from wueflo00@fac04:
+rsync -av --delete  florian@206.12.92.114:/mnt/mike/scsva_test/ /nfs3_ib/ip24/home.local/barrette.share/template-singproxy/scsva/rootfs
+
+# run/debug container on ttzbb as wueflo00@fac04:
+export CCPROXY_I_KNOW_WHAT_I_AM_DOOING=1 
+/net/ip24/home.local/barrette.share/singproxy-slurm/singproxy create --app=scsva --id=101 --path=/net/192.168.6.66/genapprojects/ttzbb/ -remote=206.12.91.43:22004 --conf=/nfs3_ib/ip24-ib/home.local/barrette.share/singproxy/conf/genap_arbutus.conf singularity exec instance://scsva101 bash
+```
+
+
+# Troubleshooting
+
+List of current issues: 
+
+1) Container gets stuck in gray screen overlay when trying to load wrong data
+
+Problem: When trying to upload the wrong data slots from a loom file, the app will show a gray screen overlay. Inside the container log, Rshiny will write errors of vaex trying to load data and having problems. This seems to be an infinite loop. How can we reset the container and Rshiny?
+
+2) Groups can only be integers
+
+Annotation groups currently can only be integers. This means that custom annotated clusters cannot be directly loaded into 
+
+3) Response time: App goes into gray mode too quickly. If I upload data, 1-2 min without action will put app into sleep mode and have to reupload data afterward.
+
+==> This seems to largely depend on where the app is deployed. Gotta see what the idle time is on v2-test once it is an app.
+
+4) Loading group labels crashes the app everytime
+

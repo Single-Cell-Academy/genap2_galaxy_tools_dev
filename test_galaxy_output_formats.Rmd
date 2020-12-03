@@ -1,0 +1,17 @@
+---
+title: "test_data_types"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This markdown is used to test the output data types from galaxy tools.
+
+# Scanpy
+
+```{r}
+h5f = H5Fopen("/home/florian/GenAP2/test_datasets/scanpy_out/scanpy_UMAP_object.1k_pbmc.h5")
+```
+

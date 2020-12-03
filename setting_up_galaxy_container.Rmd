@@ -60,13 +60,17 @@ When the Galaxy container is created, it will automatically add a admin user and
 https://wueflo00-galaxy2.proxy-east01.genap.ca
 ```
 
-
 To destroy the container, run the following code:
 
 ```{bash,eval = FALSE}
-# To clean
+## To clean
 genapproxy destroy --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local/barrette.share/singproxy/conf/jonathan_tool_mike.conf
+
+## Another way to stop the container is the following method:
+singularity instance stop galaxy
 ```
+
+
 
 ## 3) Enter the container and check data structures
 
@@ -166,7 +170,7 @@ tail -f /var/log/galaxy/uwsgi.log
 
 This is an important final step of setting up the container. We need to enable log rotation, otherwise error logs can clog the system and create problems for other users containers.
 
-In your /etc/galaxy/galaxy/yml search for the following option:
+In your /etc/galaxy/galaxy/yml search for the following option and uncomment.
 
 
 ```{bash}
@@ -188,6 +192,18 @@ Afterward, we have to create a file called /etc/logrotate.d/galaxy and insert th
    missingok
    notifempty
 }
+```
+
+## Reseting configs after destroying and recreating a galaxy
+
+If you recently destroyed your galaxy app but saved your config files beforehand, you can simply copy paste these files above the defaults and basically recreate all of your previous settings. If your config files are in your home folder under /galaxy_config_backup. Run these commands:
+
+```{bash}
+## Galaxy yaml config file
+cp galaxy.yml /etc/galaxy
+
+# log rotation file
+cp galaxy /etc/logrotate.d/
 ```
 
 
