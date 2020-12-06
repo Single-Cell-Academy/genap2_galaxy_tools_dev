@@ -18,6 +18,10 @@ The tool we will create is going to be a wrapper for the R package [alevinQC](ht
 
 [Planemo tutorial website](https://planemo.readthedocs.io/en/latest/writing_standalone.html)
 
+# Galaxy dev mailing list
+
+https://lists.galaxyproject.org/user-profile/
+
 ## Example run of alevinQC
 
 Since alevinQC is an R package, here is a short example of a standard run. We require the output files from a salmon-alevin run. The package developers of alevinQC have kindly provided some example output files with alevinQC. Let's load them now and check that they are indeed available:
@@ -54,6 +58,8 @@ planemo tool_init --force \
   --cite_url 'https://github.com/csoneson/alevinQC' \
   --help_from_command 'alevinQC'
 ```
+
+We can then manually edit the tool to add or remove any necessary elements.
 
 ```{bash}
 baseDir
