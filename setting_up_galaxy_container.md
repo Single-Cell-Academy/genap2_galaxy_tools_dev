@@ -5,7 +5,15 @@ FlorianW
 
 # Setting up a galaxy container
 
-## 1\) Connecting to FAC04
+## Introduction
+
+This markdown will exaplain how to setup and connec to the VM for
+developing single-cell Galaxy tools for GenAP2. In February 2020, the
+GenAP2 team changed the general architecture of how the Galaxy image was
+organized. This directly changed the paths for developing and
+implementing single-cell tools for Galaxy.
+
+## 1) Connecting to FAC04
 
 First, we will need to connect to the fac04. To do this, we need to add
 the following code to our .ssh/config file. If this file doesn’t exist,
@@ -24,7 +32,7 @@ your ssh/config, you can connect like this:
 ssh wueflo00@fac04.m
 ```
 
-## 2\) Instantiate your Galaxy docker container
+## 2) Instantiate your Galaxy docker container
 
 Now we are ready to create our galaxy container. First run the following
 commands to define parameters:
@@ -59,36 +67,14 @@ https://wueflo00-galaxy2.proxy-east01.genap.ca
 To destroy the container, run the following code:
 
 ``` bash
-# To clean
+## To clean
 genapproxy destroy --app=galaxy --path=$data_path --conf=/nfs3_ib/ip24/home.local/barrette.share/singproxy/conf/jonathan_tool_mike.conf
+
+## Another way to stop the container is the following method:
+singularity instance stop galaxy
 ```
 
-## Useful alias for fac04
-
-``` bash
-## app creation alias
-alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
-
-## Enter singularity container
-alias enter_galaxy="singularity exec instance://galaxy2 bash"
-
-## Restart singularity container
-alias restart_galaxy="supervisorctl restart galaxy:"
-
-## Go to location of tool_conf.xml
-alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
-
-## Go to tools
-alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
-
-## Listen to error report
-alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
-
-## Show singularity instances
-alias show_instances="singularity instance list"
-```
-
-## 3\) Enter the container and check data structures
+## 3) Enter the container and check data structures
 
 To find out your container id, run the following code in the shell:
 
@@ -113,8 +99,8 @@ This is where the main config is (galaxy.yml)
 **2) /cvmfs/soft.galaxy/v2.1/**
 
 That’s is where Galaxy reads most of it contents. I modified Galaxy to
-“ignore” most of what is installed inside the container and use what
-is in /cvmfs/
+“ignore” most of what is installed inside the container and use what is
+in /cvmfs/
 
 **3) /galaxy-central/**
 
@@ -127,7 +113,7 @@ This is the dir that Galaxy mount in the job node. Be aware that tools/
 and config/ are there as well (they are a copy of the one in
 /galaxy-central/, so keep them synchronized)
 
-## Create a single-cell tool config file
+## 4) Create a single-cell tool config file
 
 To add our single-cell tools to the main galaxy, we need to create a
 config file specifically for single-cell tools. Create a file in the
@@ -194,7 +180,8 @@ This is an important final step of setting up the container. We need to
 enable log rotation, otherwise error logs can clog the system and create
 problems for other users containers.
 
-In your /etc/galaxy/galaxy/yml search for the following option:
+In your /etc/galaxy/galaxy/yml search for the following option and
+uncomment.
 
 ``` bash
 nano /etc/galaxy/galaxy.yml
@@ -217,19 +204,48 @@ insert the following code:
 }
 ```
 
-# Installing tools
+## Reseting configs after destroying and recreating a galaxy
 
-## Creating a conda environment
-
-## Mulled environments
-
-## Removing environment
+If you recently destroyed your galaxy app but saved your config files
+beforehand, you can simply copy paste these files above the defaults and
+basically recreate all of your previous settings. If your config files
+are in your home folder under /galaxy\_config\_backup. Run these
+commands:
 
 ``` bash
-## Activate conda
-cd /cvmfs/soft.galaxy/v2.1/tool-dependency/_conda
-source ./bin/activate
+## Galaxy yaml config file
+cp galaxy.yml /etc/galaxy
 
-## Example of an environment I had to remove 
-conda env remove --name mulled-v1-f15f2990922649e8d475c29369a096c6a0404769bf8aaaeaa6b402f5fd3657eb ## replace this name by the environment name you want to remove
+# log rotation file
+cp galaxy /etc/logrotate.d/
 ```
+
+## Useful alias for fac04
+
+``` bash
+## app creation alias
+alias genapproxy=/nfs3_ib/ip24/home.local/barrette.share/singproxy-slurm/singproxy
+
+## Enter singularity container
+alias enter_galaxy="singularity exec instance://galaxy2 bash"
+
+## Restart singularity container
+alias restart_galaxy="supervisorctl restart galaxy:"
+
+## Go to location of tool_conf.xml
+alias to_conf="cd /cvmfs/soft.galaxy/v2.1/server/config"
+
+## Go to tools
+alias to_tools="cd /cvmfs/soft.galaxy/v2.1/server/tools"
+
+## Listen to error report
+alias listen_to_errors="tail -f /var/log/galaxy/uwsgi.log"
+
+## Show singularity instances
+alias show_instances="singularity instance list"
+```
+
+## Troubleshooting
+
+In case the Galaxy app returns a spawn error when trying to restart
+using the following command:

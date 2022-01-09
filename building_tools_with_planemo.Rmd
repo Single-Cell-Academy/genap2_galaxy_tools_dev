@@ -7,7 +7,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+knitr::opts_chunk$set(echo = TRUE,  eval = FALSE, results = FALSE)
 ```
 
 In this tutorial, I will describe how to construct a galaxy tool wrapper for a local galaxy installation from beginning to end. 
@@ -34,7 +34,7 @@ checkAlevinInputFiles(baseDir = baseDir)
 
 A standard run of alevinQC is also given as an example in the tutorial:
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 outputDir <- tempdir()
 alevinQCReport(baseDir = baseDir, sampleId = "testSample", 
                outputFile = "alevinQCReport.html", 
@@ -72,4 +72,18 @@ baseDir
   |    |--alevin_meta_info.json
   |--cmd_info.json
 ```
+
+
+## Preparing submission for tool shed
+
+```{bash}
+## This only needs to be run once at the very beginning of setting up planemo
+planemo config_init
+```
+
+
+```{bash}
+planemo shed_init --name=alevinqc --owner=fwuennemann --description="AlevinQC produces quality control reports for salmon-alevin runs." --remote_repository_url=https://github.com/Single-Cell-Academy/alevinQC_galaxy --homepage_url=https://bioconductor.org/packages/release/bioc/html/alevinQC.html
+```
+
 
